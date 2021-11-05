@@ -8,11 +8,13 @@ RUN apt-get update \
     zlib1g-dev \
     unzip sox \
     gfortran \
-    libc6-dev-i386
+    libc6-dev-i386 \
+    unzip
 
 WORKDIR /opt/kaldi
-RUN git clone -b lookahead-1.8.0 --single-branch https://github.com/alphacep/kaldi . && \
-    git checkout 75ecaef39
+RUN curl --fail -q -L https://github.com/alphacep/kaldi/archive/75ecaef3981158e74e512f6eec84d9a75571b415.zip -o kaldi.zip && \
+    unzip kaldi.zip && \
+    mv kaldi-75ecaef3981158e74e512f6eec84d9a75571b415/* .
 ADD kaldi.patch /tmp
 RUN git apply -v /tmp/kaldi.patch
 
